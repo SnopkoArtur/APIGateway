@@ -2,6 +2,9 @@ package com.apigateway.config;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -28,7 +31,12 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static class Config {}
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Config {
+        private String name = "JwtFilter";
+    }
 
     @Override
     public GatewayFilter apply(Config config) {

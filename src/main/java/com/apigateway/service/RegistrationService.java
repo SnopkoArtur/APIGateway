@@ -16,6 +16,8 @@ import reactor.core.publisher.Mono;
 public class RegistrationService {
     private final WebClient.Builder webClientBuilder;
     private final InternalJwtProvider internalJwtProvider;
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String BEARER = "Bearer ";
 
     @Value("${services.auth-url}") String authUrl;
     @Value("${services.user-url}") String userUrl;
@@ -41,7 +43,7 @@ public class RegistrationService {
     private Mono<UserResponseDto> saveToUser(RegistrationDto dto, String token) {
         return webClientBuilder.build().post()
                 .uri(userUrl + "/api/v1/users")
-                .header("Authorization", "Bearer " + token)
+                .header(AUTHORIZATION, BEARER + token)
                 .bodyValue(dto)
                 .retrieve()
                 .bodyToMono(UserResponseDto.class);
@@ -56,7 +58,7 @@ public class RegistrationService {
 
         return webClientBuilder.build().post()
                 .uri(authUrl + "/api/v1/auth/save")
-                .header("Authorization", "Bearer " + token)
+                .header(AUTHORIZATION, BEARER + token)
                 .bodyValue(authData)
                 .retrieve()
                 .toBodilessEntity()
@@ -66,7 +68,7 @@ public class RegistrationService {
     private Mono<Void> rollbackUser(Long userId, String token) {
         return webClientBuilder.build().delete()
                 .uri(userUrl + "/api/v1/users/" + userId)
-                .header("Authorization", "Bearer " + token)
+                .header(AUTHORIZATION, BEARER + token)
                 .retrieve()
                 .toBodilessEntity()
                 .then();

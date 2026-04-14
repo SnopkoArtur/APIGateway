@@ -23,7 +23,7 @@ class RegistrationIntegrationTest extends BaseGatewayIntegrationTest {
     }
 
     @Test
-    void registration_Success_ShouldCallBothServices() throws Exception {
+    void registration_Success_ShouldCallBothServices(){
         RegistrationDto dto = new RegistrationDto("login", "pass", Role.USER, "Name", "Surname", "email@test.com", null);
 
         userMock.stubFor(WireMock.post(urlEqualTo("/api/v1/users"))
