@@ -1,0 +1,62 @@
+name: APIGateway CI/CD
+
+on:
+  push:
+    branches: [ "main", "master", "APIGateway" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Build, Test and Analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JWT_KEY: ${{ secrets.JWT_KEY }}
+          SERVER_PORT: ${{secrets.API_GATEWAY_PORT}}
+          AUTH_SERVICE_URL: ${{secrets.AUTH_SERVICE_URL}}
+          USER_SERVICE_URL: ${{secrets.USER_SERVICE_URL}}
+          ORDER_SERVICE_URL: ${{secrets.ORDER_SERVICE_URL}}
+          services.auth-url: ${{secrets.AUTH_SERVICE_URL}}
+          services.user-url: ${{secrets.USER_SERVICE_URL}}
+        run: |  
+          mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+          -Dsonar.projectKey=SnopkoArtur_APIGateway \
+          -Dsonar.organization=snopkoartur
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:${{ github.sha }}
