@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class RegistrationServiceTest {
+class RegistrationServiceImplTest {
 
     private static MockWebServer mockBackEnd;
     private RegistrationService registrationService;
@@ -43,7 +43,7 @@ class RegistrationServiceTest {
     void initialize() {
         String baseUrl = String.format("http://localhost:%s", mockBackEnd.getPort());
 
-        registrationService = new RegistrationService(WebClient.builder(), internalJwtProvider);
+        registrationService = new RegistrationServiceImpl(WebClient.builder(), internalJwtProvider);
 
         ReflectionTestUtils.setField(registrationService, "authUrl", baseUrl);
         ReflectionTestUtils.setField(registrationService, "userUrl", baseUrl);
