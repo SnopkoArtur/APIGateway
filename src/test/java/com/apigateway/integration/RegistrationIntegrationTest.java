@@ -62,4 +62,19 @@ class RegistrationIntegrationTest extends BaseGatewayIntegrationTest {
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Service is temporarily unavailable. Please try again later.");
     }
+
+    @Test
+    void shouldReturn400_WhenValidationFails() {
+        userMock.resetAll();
+        userMock.stubFor(WireMock.post(urlEqualTo("/api/v1/users"))
+                .willReturn(aResponse().withStatus(503)));
+
+        RegistrationDto dto = new RegistrationDto();
+
+        webTestClient.post().uri("/api/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(dto)
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.BAD_REQUEST);
+    }
 }
