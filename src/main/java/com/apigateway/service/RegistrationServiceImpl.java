@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -51,7 +54,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     private Mono<Void> saveToAuth(RegistrationDto dto, Long userId, String token) {
-        java.util.Map<String, Object> authData = new java.util.HashMap<>();
+        Map<String, Object> authData = new HashMap<>();
         authData.put("login", dto.getLogin());
         authData.put("password", dto.getPassword());
         authData.put("role", dto.getRole());

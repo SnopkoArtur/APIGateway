@@ -10,6 +10,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -44,7 +45,13 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
             ServerHttpRequest request = exchange.getRequest();
 
             String path = request.getURI().getPath();
-            if (path.contains("/auth/login") || path.contains("/auth/register")) {
+            HttpMethod method = request.getMethod();
+
+            if (path.equals("/api/v1/users") && HttpMethod.POST.equals(method)) {
+                return chain.filter(exchange);
+            }
+
+            if (path.contains("/auth/login") || path.contains("/auth/refresh")) {
                 return chain.filter(exchange);
             }
 
