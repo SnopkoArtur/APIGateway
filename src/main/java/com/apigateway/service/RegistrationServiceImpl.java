@@ -39,6 +39,11 @@ public class RegistrationServiceImpl implements RegistrationService {
                             .onErrorResume(e -> {
                                 log.error("Auth Service failed, rolling back User Service for ID: {}", generatedId);
                                 return rollbackUser(generatedId, internalAdminToken)
+                                        .onErrorResume(rollbackError -> {
+                                            log.error(" Rollback failed for User ID {}! Data inconsistency detected. Reason: {}",
+                                                    generatedId, rollbackError.getMessage());
+                                            return Mono.empty();
+                                        })
                                         .then(Mono.error(e));
                             });
                 });

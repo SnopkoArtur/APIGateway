@@ -35,7 +35,7 @@ class RegistrationIntegrationTest extends BaseGatewayIntegrationTest {
         authMock.stubFor(WireMock.post(urlEqualTo("/api/v1/auth/save"))
                 .willReturn(aResponse().withStatus(200)));
 
-        webTestClient.post().uri("/api/v1/users")
+        webTestClient.post().uri("/api/v1/registrations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(dto)
                 .exchange()
@@ -54,7 +54,7 @@ class RegistrationIntegrationTest extends BaseGatewayIntegrationTest {
         RegistrationDto dto = new RegistrationDto("test_service_down", "password", Role.USER, "name", "surname", "unavailable@test.com", null);
 
 
-        webTestClient.post().uri("/api/v1/users")
+        webTestClient.post().uri("/api/v1/registrations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(dto)
                 .exchange()
@@ -71,7 +71,7 @@ class RegistrationIntegrationTest extends BaseGatewayIntegrationTest {
 
         RegistrationDto dto = new RegistrationDto();
 
-        webTestClient.post().uri("/api/v1/users")
+        webTestClient.post().uri("/api/v1/registrations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(dto)
                 .exchange()

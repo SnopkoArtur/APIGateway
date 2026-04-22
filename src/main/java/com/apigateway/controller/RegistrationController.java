@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 public class RegistrationController {
 
     private final RegistrationService registrationService;
-    @PostMapping("/api/v1/users")
+    @PostMapping("/api/v1/registrations")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> register(@RequestBody @Valid RegistrationDto dto) {
         return registrationService.register(dto);
