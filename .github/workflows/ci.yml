@@ -39,6 +39,7 @@ jobs:
           AUTH_SERVICE_URL: ${{secrets.AUTH_SERVICE_URL}}
           USER_SERVICE_URL: ${{secrets.USER_SERVICE_URL}}
           ORDER_SERVICE_URL: ${{secrets.ORDER_SERVICE_URL}}
+          PAYMENT_SERVICE_URL: ${{secrets.PAYMENT_SERVICE_URL}}
           services.auth-url: ${{secrets.AUTH_SERVICE_URL}}
           services.user-url: ${{secrets.USER_SERVICE_URL}}
         run: |  
