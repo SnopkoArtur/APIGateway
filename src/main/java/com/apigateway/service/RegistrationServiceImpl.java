@@ -22,8 +22,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER = "Bearer ";
 
-    @Value("${services.auth-url}") String authUrl;
-    @Value("${services.user-url}") String userUrl;
+    @Value("${AUTH_SERVICE_URL}") String authUrl;
+    @Value("${USER_SERVICE_URL}") String userUrl;
 
     @Override
     public Mono<Void> register(RegistrationDto dto) {

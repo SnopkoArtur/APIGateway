@@ -1,6 +1,10 @@
 server:
   port: ${API_GATEWAY_PORT}
 
+services:
+  auth-url: ${AUTH_SERVICE_URL}
+  user-url: ${USER_SERVICE_URL}
+
 spring:
   cloud:
     gateway:
@@ -33,10 +37,22 @@ spring:
           filters:
             - name: JwtFilter
 
-services:
-  auth-url: ${AUTH_SERVICE_URL}
-  user-url: ${USER_SERVICE_URL}
-  payment-url: ${PAYMENT_SERVICE_URL}
 
 jwt:
   key: ${JWT_KEY}
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+      group:
+        readiness:
+          include: readinessState
+        liveness:
+          include: livenessState
+  endpoints:
+    web:
+      exposure:
+        include: health
