@@ -34,6 +34,9 @@ public abstract class BaseGatewayIntegrationTest {
 
     @DynamicPropertySource
     static void props(DynamicPropertyRegistry reg) {
+        reg.add("AUTH_SERVICE_URL", () -> "http://localhost:8081");
+        reg.add("USER_SERVICE_URL", () -> "http://localhost:8080");
+        reg.add("PAYMENT_SERVICE_URL", () -> "http://localhost:8084");
         reg.add("services.auth-url", () -> "http://localhost:8081");
         reg.add("services.user-url", () -> "http://localhost:8080");
         reg.add("jwt.key", () -> "very_long_secret_key_at_least_32_chars_12345");
